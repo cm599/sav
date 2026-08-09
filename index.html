@@ -272,11 +272,12 @@
         let currentModalTarget = 'custom'; 
         let currentEngineKey = 'google';
         
-        // 全局云端配置中心：整合所有区块的标题与隐藏状态
+        // 全局云端配置中心：整合所有区块的标题与隐藏状态，【新增】 defaultLang 默认语言字段
         let cloudConfig = { 
             wallpaper: "", dynamicSections: [], adminPwd: "", 
             recTitle: "", devTitle: "", customTitle: "", friendTitle: "",
-            recHide: false, devHide: false, customHide: false, friendHide: false 
+            recHide: false, devHide: false, customHide: false, friendHide: false,
+            defaultLang: "zh"
         };
 
         let dragType = null; 
@@ -375,9 +376,23 @@
             });
         }
 
-        function setLanguage(lang) {
-            currentLang = lang; localStorage.setItem('nav_lang', lang); document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
-            applyLanguage(); updateClockAndGreeting(); renderWeather(); selectEngine(currentEngineKey); document.getElementById('theme-panel').classList.add('hidden');
+        // 【修改】：加入 syncCloud 控制参数，如果是管理员主动切换，触发云端同步
+        function setLanguage(lang, syncCloud = true) {
+            currentLang = lang; 
+            localStorage.setItem('nav_lang', lang); 
+            document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+            applyLanguage(); 
+            updateClockAndGreeting(); 
+            renderWeather(); 
+            selectEngine(currentEngineKey); 
+            
+            const panel = document.getElementById('theme-panel');
+            if (panel) panel.classList.add('hidden');
+
+            // 如果处于管理员登录状态，将语言偏好同步到云端，作为全站的默认初始语言
+            if (syncCloud && localStorage.getItem('nav_admin_auth') === 'true') {
+                updateCloudConfig('defaultLang', lang);
+            }
         }
 
         function applyLanguage() {
@@ -521,10 +536,17 @@
                         if (configData.dynamicSections) { cloudConfig.dynamicSections = configData.dynamicSections; localStorage.setItem('nav_dynamic_sections', JSON.stringify(cloudConfig.dynamicSections)); }
                         if (configData.adminPwd) cloudConfig.adminPwd = configData.adminPwd;
                         
-                        // 同步标题与隐藏状态
-                        ['recTitle', 'devTitle', 'customTitle', 'friendTitle', 'recHide', 'devHide', 'customHide', 'friendHide'].forEach(k => {
+                        // 同步标题与隐藏状态，【新增】加入 defaultLang 语言偏好判断
+                        ['recTitle', 'devTitle', 'customTitle', 'friendTitle', 'recHide', 'devHide', 'customHide', 'friendHide', 'defaultLang'].forEach(k => {
                             if (configData[k] !== undefined) cloudConfig[k] = configData[k];
                         });
+
+                        // 【新增】：如果当前是管理员登录，或该访客本地从未设置过语言，则跟随云端的语言设置
+                        if (cloudConfig.defaultLang && (localStorage.getItem('nav_admin_auth') === 'true' || !localStorage.getItem('nav_lang'))) {
+                            if (currentLang !== cloudConfig.defaultLang) {
+                                setLanguage(cloudConfig.defaultLang, false); // false 代表避免死循环，不去重复提交云端
+                            }
+                        }
                     }
                 }
             } catch (e) {}
@@ -645,7 +667,6 @@
                                     ${displayIcon} <span class="${textSizeClass} font-medium truncate">${displayName}</span>
                                 </a>
                             </div>
-                            <!-- 彻底解决悬浮隐藏问题：去除 opacity-0，使得进入管理模式直接固定可见 -->
                             <div class="admin-only absolute ${actionWrapClass} z-10 opacity-70 hover:opacity-100 transition-opacity">
                                 <button type="button" onclick="openEditSectionLinkModal(event, '${sec.id}', ${idx})" class="${btnActionClass} text-slate-400 hover:text-sky-400 bg-slate-500/30 rounded cursor-pointer shrink-0" title="编辑"><i class="fas fa-pen"></i></button>
                                 <button type="button" onclick="deleteSectionLink(event, '${sec.id}', ${idx})" class="${btnActionClass} text-slate-400 hover:text-red-400 bg-slate-500/30 rounded cursor-pointer shrink-0" title="删除"><i class="fas fa-trash-alt"></i></button>
@@ -777,7 +798,6 @@
                                 ${displayIcon} <span class="text-sm font-medium truncate">${displayName}</span>
                             </a>
                         </div>
-                        <!-- 取消悬停隐藏，常驻显示 -->
                         <div class="admin-only absolute ${actionWrapClass} z-10 opacity-70 hover:opacity-100 transition-opacity">
                             <button type="button" onclick="openEditStaticLinkModal(event, '${category}', ${index})" class="${btnActionClass} text-slate-400 hover:text-sky-400 bg-slate-500/30 rounded cursor-pointer shrink-0" title="编辑"><i class="fas fa-pen"></i></button>
                             <button type="button" onclick="deleteStaticLink(event, '${category}', ${index})" class="${btnActionClass} text-slate-400 hover:text-red-400 bg-slate-500/30 rounded cursor-pointer shrink-0" title="删除"><i class="fas fa-trash-alt"></i></button>
