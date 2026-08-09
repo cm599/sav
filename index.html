@@ -115,7 +115,7 @@
                 </div>
             </div>
             
-            <!-- 修改管理员密码区域 (仅管理员可见) -->
+            <!-- 【新增】修改管理员密码区域 (仅管理员可见) -->
             <div class="admin-only space-y-1.5 px-1 border-t border-slate-800 pt-3 mt-1">
                 <label class="text-[11px] text-slate-400 font-bold" data-i18n="pwdTitle">修改管理员密码 (全站同步)</label>
                 <div class="flex gap-1.5">
@@ -170,17 +170,7 @@
 
         <!-- 导航卡片网格 -->
         <div id="main-nav-grid" class="w-full grid grid-cols-1 xl:grid-cols-3 gap-8 mb-8 relative z-10 items-start">
-
-            <div id="card-custom" class="glass-card rounded-2xl p-6 shadow-xl hover:border-pink-500/30 transition-all duration-300 xl:col-span-1">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-semibold text-pink-400 flex items-center"><i class="fas fa-folder-plus mr-2.5"></i> <span data-i18n="cardCustom" id="custom-title-text">站长推荐</span></h3>
-                    <!-- 更新：增加了添加、编辑、删除的一组按钮 -->
-                    <div class="flex gap-1.5 shrink-0 ml-2">
-                        <button type="button" onclick="openLinkModal('custom')" class="admin-only text-[10px] px-2 py-1 bg-pink-600/20 text-pink-400 border border-pink-500/20 rounded-md hover:bg-pink-600/40 transition-colors cursor-pointer z-[50]"><span data-i18n="addCloud">添加 (云端)</span></button>
-                        <button type="button" onclick="renameStaticSection('custom')" class="admin-only text-[10px] px-2 py-1 bg-sky-600/20 text-sky-400 border border-sky-500/20 rounded-md hover:bg-sky-600/40 transition-colors cursor-pointer z-[50]"><i class="fas fa-pen"></i></button>
-                        <button type="button" onclick="deleteStaticSection('custom')" class="admin-only text-[10px] px-2 py-1 bg-red-600/20 text-red-400 border border-red-500/20 rounded-md hover:bg-red-600/40 transition-colors cursor-pointer z-[50]"><i class="fas fa-trash"></i></button>
-                    </div>
-                </div>
+            
                 <div id="custom-links-container"></div>
                 <div id="expand-action-wrapper" class="mt-4 pt-2 border-t border-slate-500/10 text-center hidden">
                     <button onclick="toggleExpandCustomLinks()" id="expand-btn" class="text-xs font-semibold text-pink-400 hover:text-pink-300 transition-colors cursor-pointer inline-flex items-center gap-1">
@@ -200,12 +190,8 @@
         <div class="w-full relative z-10 mb-12">
             <div class="glass-card rounded-2xl p-6 shadow-xl hover:border-emerald-500/20 transition-all duration-300">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-base font-semibold text-emerald-400 flex items-center"><i class="fas fa-handshake mr-2.5"></i> <span data-i18n="cardFriend" id="friend-title-text">友情链接</span></h3>
-                    <!-- 更新：增加了添加、编辑的一组按钮 -->
-                    <div class="flex gap-1.5 shrink-0 ml-2">
-                        <button type="button" onclick="openLinkModal('friend')" class="admin-only text-[10px] px-2 py-1 bg-emerald-600/20 text-emerald-400 border border-emerald-500/20 rounded-md hover:bg-emerald-600/40 transition-colors cursor-pointer z-[50]"><span data-i18n="addLocal">添加 (本地)</span></button>
-                        <button type="button" onclick="renameStaticSection('friend')" class="admin-only text-[10px] px-2 py-1 bg-sky-600/20 text-sky-400 border border-sky-500/20 rounded-md hover:bg-sky-600/40 transition-colors cursor-pointer z-[50]"><i class="fas fa-pen"></i></button>
-                    </div>
+                    <h3 class="text-base font-semibold text-emerald-400 flex items-center"><i class="fas fa-handshake mr-2.5"></i> <span data-i18n="cardFriend">友情链接</span></h3>
+                    <button type="button" onclick="openLinkModal('friend')" class="admin-only text-xs px-2.5 py-1 bg-emerald-600/20 text-emerald-400 border border-emerald-500/20 rounded-lg hover:bg-emerald-600/40 transition-colors cursor-pointer z-[50]" data-i18n="addLocal">添加 (本地)</button>
                 </div>
                 <div id="friend-links-container" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3"></div>
             </div>
@@ -245,8 +231,8 @@
         let currentModalTarget = 'custom'; 
         let currentEngineKey = 'google';
         
-        // 全局云端配置中心：增加了 customTitle、friendTitle 和 customHidden 字段
-        let cloudConfig = { wallpaper: "", dynamicSections: [], adminPwd: "", customTitle: "", friendTitle: "", customHidden: false };
+        // 全局云端配置中心：整合了壁纸、分类区域 和 【新增】管理员密码
+        let cloudConfig = { wallpaper: "", dynamicSections: [], adminPwd: "" };
 
         let dragType = null; 
         let dragSecId = null; 
@@ -262,12 +248,11 @@
                 linkBlog: "科技共享博客", linkBili: "哔哩哔哩", linkZhihu: "知乎", linkWeibo: "微博", linkJuejin: "稀土掘金",
                 addCloud: "添加 (云端)", addLocal: "添加 (本地)", expandMore: "展开显示更多", collapseMore: "收起部分站点",
                 footerText: "&copy; 2026 科技共享-智能生态导航 · Powered by Cloudflare", adminBadge: "已登入",
-                modalAddCloud: "添加云端站长推荐", modalAddFriend: "添加友情链接", modalAddSection: "添加到自定义区域", modalEditSectionLink: "编辑导航链接", 
-                siteName: "网站名称", siteNamePlace: "例如：百度", siteUrl: "网站网址 (URL)",
+                modalAddCloud: "添加云端站长推荐", modalAddFriend: "添加友情链接", siteName: "网站名称", siteNamePlace: "例如：百度", siteUrl: "网站网址 (URL)",
                 btnCancel: "取消", btnSave: "保存站点", noCloudLinks: "暂无自定义链接", loadingCloud: "正在从云端加载...",
                 delConfirm: "确定要删除这个链接吗？", pwdPrompt: "🔐 请输入后台管理员安全密码：", pwdSuccess: "🎉 认证成功！管理功能已全部解锁。", pwdFail: "❌ 密码错误，鉴权失败！", logoutMsg: "🔒 已安全退出管理后台，页面回归只读状态。",
                 weatherCloudy: "多云", weatherClear: "晴朗", weatherRain: "阵雨", weatherSnow: "降雪", weatherThunder: "雷阵雨", weatherDefault: "风调雨顺 · 晴", validUrlMsg: "提示：请输入有效的网址！",
-                addSectionBtn: "添加自定义区域", promptSectionName: "请输入新区域的名称 (例如：AI工具)：", delSectionConfirm: "确定要删除整个区域及其所有链接吗？",
+                addSectionBtn: "添加自定义区域", promptSectionName: "请输入新区域的名称 (例如：AI工具)：", delSectionConfirm: "确定要删除整个区域及其所有链接吗？", modalAddSection: "添加到自定义区域",
                 renameSectionPrompt: "请输入新的区域名称：",
                 pwdTitle: "修改管理员密码 (全站同步)", pwdInputPlace: "输入新密码", saveBtn: "保存", pwdUpdateSuccess: "管理员密码修改成功！下次登录生效。"
             },
@@ -280,12 +265,11 @@
                 linkBlog: "TechShare Blog", linkBili: "Bilibili", linkZhihu: "Zhihu", linkWeibo: "Weibo", linkJuejin: "Juejin",
                 addCloud: "Add (Cloud)", addLocal: "Add (Local)", expandMore: "Show More", collapseMore: "Collapse",
                 footerText: "&copy; 2026 TechShare Smart Nav · Powered by Cloudflare", adminBadge: "Logged In",
-                modalAddCloud: "Add Cloud Link", modalAddFriend: "Add Friend Link", modalAddSection: "Add to Custom Section", modalEditSectionLink: "Edit Navigation Link",
-                siteName: "Site Name", siteNamePlace: "e.g., Google", siteUrl: "Site URL",
+                modalAddCloud: "Add Cloud Link", modalAddFriend: "Add Friend Link", siteName: "Site Name", siteNamePlace: "e.g., Google", siteUrl: "Site URL",
                 btnCancel: "Cancel", btnSave: "Save Site", noCloudLinks: "No custom links yet", loadingCloud: "Loading from cloud...",
                 delConfirm: "Are you sure you want to delete this link?", pwdPrompt: "🔐 Enter Admin Password:", pwdSuccess: "🎉 Authenticated! Admin features unlocked.", pwdFail: "❌ Incorrect password!", logoutMsg: "🔒 Logged out safely. Read-only mode activated.",
                 weatherCloudy: "Cloudy", weatherClear: "Clear", weatherRain: "Rain", weatherSnow: "Snow", weatherThunder: "Thunder", weatherDefault: "Good Weather · Clear", validUrlMsg: "Please enter a valid URL!",
-                addSectionBtn: "Add Custom Section", promptSectionName: "Enter new section name (e.g., AI Tools):", delSectionConfirm: "Are you sure you want to delete this entire section?",
+                addSectionBtn: "Add Custom Section", promptSectionName: "Enter new section name (e.g., AI Tools):", delSectionConfirm: "Are you sure you want to delete this entire section?", modalAddSection: "Add to Custom Section",
                 renameSectionPrompt: "Enter new section name:",
                 pwdTitle: "Change Admin Password (Cloud Sync)", pwdInputPlace: "Enter new password", saveBtn: "Save", pwdUpdateSuccess: "Admin password updated successfully! Valid on next login."
             }
@@ -306,61 +290,11 @@
             currentLang = lang; localStorage.setItem('nav_lang', lang); document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
             applyLanguage(); updateClockAndGreeting(); renderWeather(); selectEngine(currentEngineKey); document.getElementById('theme-panel').classList.add('hidden');
         }
-
-        // 新增：全局静态标题刷新机制
-        function updateStaticTitles() {
-            const customTitleEl = document.getElementById('custom-title-text');
-            const friendTitleEl = document.getElementById('friend-title-text');
-            if (cloudConfig.customTitle && customTitleEl) customTitleEl.innerText = cloudConfig.customTitle;
-            if (cloudConfig.friendTitle && friendTitleEl) friendTitleEl.innerText = cloudConfig.friendTitle;
-            
-            const cardCustom = document.getElementById('card-custom');
-            if (cardCustom) {
-                if (cloudConfig.customHidden) cardCustom.style.display = 'none';
-                else cardCustom.style.display = '';
-            }
-        }
-
         function applyLanguage() {
             document.getElementById('page-title').innerText = t('pageTitle');
             document.querySelectorAll('[data-i18n]').forEach(el => { el.innerHTML = t(el.getAttribute('data-i18n')); });
             document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = t(el.getAttribute('data-i18n-placeholder')); });
-            
-            // 覆盖加载可能被本地化还原的自定义名称
-            updateStaticTitles();
-
             loadCustomLinks(); loadFriendLinks(); renderDynamicSections();
-        }
-
-        // 新增：编辑静态站长模块与友情链接模块名称
-        function renameStaticSection(type) {
-            if (type === 'custom') {
-                const current = cloudConfig.customTitle || t('cardCustom');
-                const newTitle = prompt(t('renameSectionPrompt'), current);
-                if (newTitle && newTitle.trim() !== '' && newTitle !== current) {
-                    cloudConfig.customTitle = newTitle.trim();
-                    updateCloudConfig('customTitle', cloudConfig.customTitle);
-                    updateStaticTitles();
-                }
-            } else if (type === 'friend') {
-                const current = cloudConfig.friendTitle || t('cardFriend');
-                const newTitle = prompt(t('renameSectionPrompt'), current);
-                if (newTitle && newTitle.trim() !== '' && newTitle !== current) {
-                    cloudConfig.friendTitle = newTitle.trim();
-                    updateCloudConfig('friendTitle', cloudConfig.friendTitle);
-                    updateStaticTitles();
-                }
-            }
-        }
-
-        // 新增：隐藏/删除静态站长模块
-        function deleteStaticSection(type) {
-            if (type === 'custom') {
-                if(!confirm(t('delSectionConfirm'))) return;
-                cloudConfig.customHidden = true;
-                updateCloudConfig('customHidden', true);
-                updateStaticTitles();
-            }
         }
 
         // --- 1. 管理员鉴权 (动态密码校验) ---
@@ -375,6 +309,7 @@
             const pwd = prompt(t('pwdPrompt'));
             if (pwd === null) return;
             
+            // 【关键】：校验密码时优先使用云端配置，如果没有则使用初始密码 admin888
             const currentValidPwd = cloudConfig.adminPwd || "admin888";
             
             if (pwd === currentValidPwd) { 
@@ -388,6 +323,7 @@
             isCustomLinksExpanded = false; expandedDynamicSections = {}; checkAdminSession(); document.getElementById('theme-panel').classList.add('hidden');
         }
 
+        // 【新增】：修改并同步管理员密码
         async function updateAdminPwd() {
             const newPwd = document.getElementById('custom-pwd-input').value.trim();
             if (!newPwd) return;
@@ -464,7 +400,7 @@
             saveDynamicSections(secs);
         }
 
-        // --- 3. 云端调度器 ---
+        // --- 3. 云端调度器 (新增 adminPwd 同步) ---
         async function initCloudData() {
             const savedTheme = localStorage.getItem('nav_theme_mode') || 'theme-dark';
             document.body.classList.remove('theme-light', 'theme-dark'); document.body.classList.add(savedTheme);
@@ -483,19 +419,12 @@
                         }
                         if (configData.dynamicSections) { cloudConfig.dynamicSections = configData.dynamicSections; localStorage.setItem('nav_dynamic_sections', JSON.stringify(cloudConfig.dynamicSections)); }
                         if (configData.adminPwd) { cloudConfig.adminPwd = configData.adminPwd; }
-                        
-                        // 初始化云端记录的静态标题设置
-                        if (configData.customTitle !== undefined) { cloudConfig.customTitle = configData.customTitle; }
-                        if (configData.friendTitle !== undefined) { cloudConfig.friendTitle = configData.friendTitle; }
-                        if (configData.customHidden !== undefined) { cloudConfig.customHidden = configData.customHidden; }
                     }
                 }
             } catch (e) {}
 
             if (!savedBg && !document.body.classList.contains('bg-cleared')) savedBg = globalDefaultBg; 
             if (savedBg) { applyWallpaperStyles(savedBg); document.getElementById('custom-bg-input').value = savedBg; document.getElementById('clear-bg-btn').classList.remove('hidden'); }
-            
-            updateStaticTitles();
             renderDynamicSections();
         }
 
@@ -599,8 +528,7 @@
                     const textSizeClass = isCompact ? 'text-[11px]' : 'text-sm';
                     const prClass = isCompact ? 'pr-4' : 'pr-5';
                     const dragMrClass = isCompact ? 'mr-1.5' : 'mr-2.5';
-                    const actionWrapClass = isCompact ? 'right-1 flex gap-0.5' : 'right-2 flex gap-1';
-                    const btnActionClass = isCompact ? 'text-[10px] px-1 py-0.5' : 'text-xs p-1';
+                    const btnClass = isCompact ? 'right-1 text-[10px] px-1 py-0.5' : 'right-2 text-xs p-1';
 
                     visibleLinks.forEach((link, idx) => {
                         const displayName = getLocalizedLinkName(link.name, link.url);
@@ -620,10 +548,7 @@
                                     ${displayIcon} <span class="${textSizeClass} font-medium truncate">${displayName}</span>
                                 </a>
                             </div>
-                            <div class="admin-only absolute ${actionWrapClass} opacity-0 group-hover:opacity-100 transition-opacity z-10">
-                                <button type="button" onclick="openEditSectionLinkModal(event, '${sec.id}', ${idx})" class="${btnActionClass} text-slate-400 hover:text-sky-400 bg-slate-500/20 rounded cursor-pointer shrink-0" title="编辑"><i class="fas fa-pen"></i></button>
-                                <button type="button" onclick="deleteSectionLink(event, '${sec.id}', ${idx})" class="${btnActionClass} text-slate-400 hover:text-red-400 bg-slate-500/20 rounded cursor-pointer shrink-0" title="删除"><i class="fas fa-trash-alt"></i></button>
-                            </div>
+                            <button type="button" onclick="deleteSectionLink(event, '${sec.id}', ${idx})" class="admin-only absolute ${btnClass} text-slate-400 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-500/20 rounded cursor-pointer shrink-0"><i class="fas fa-trash-alt"></i></button>
                         </div>`;
                     });
                 }
@@ -662,20 +587,6 @@
                 grid.insertBefore(card, addBtnCard);
             });
             checkAdminSession();
-        }
-
-        function openEditSectionLinkModal(e, secId, linkIdx) {
-            e.preventDefault(); e.stopPropagation();
-            let secs = cloudConfig.dynamicSections || [];
-            const sec = secs.find(s => s.id === secId);
-            if(sec && sec.links[linkIdx]) {
-                const link = sec.links[linkIdx];
-                currentModalTarget = `edit_section_${secId}_${linkIdx}`;
-                document.getElementById('modal-title-text').innerText = t('modalEditSectionLink');
-                document.getElementById('site-name').value = link.name;
-                document.getElementById('site-url').value = link.url;
-                toggleModal(true); 
-            }
         }
 
         function deleteSectionLink(e, secId, linkIdx) {
@@ -729,24 +640,8 @@
         function selectEngine(key) { currentEngineKey = key; const form = document.getElementById('search-form'); const input = document.getElementById('search-input'); const icon = document.getElementById('engine-icon'); form.action = engines[key].action; input.name = engines[key].name; input.setAttribute('data-i18n-placeholder', engines[key].placeholderKey); input.placeholder = t(engines[key].placeholderKey); icon.className = engines[key].icon; document.getElementById('engine-menu').classList.add('hidden'); }
 
         // --- 8. 原站长推荐 ---
-        function toggleModal(show) { 
-            const modal = document.getElementById('modal'); 
-            if (show) { modal.classList.remove('hidden'); } 
-            else { modal.classList.add('hidden'); } 
-        }
-
-        function openLinkModal(target) { 
-            currentModalTarget = target; 
-            const textEl = document.getElementById('modal-title-text'); 
-            if(target === 'friend') textEl.innerText = t('modalAddFriend'); 
-            else if(target === 'custom') textEl.innerText = t('modalAddCloud'); 
-            else textEl.innerText = t('modalAddSection'); 
-            
-            document.getElementById('site-name').value = ''; 
-            document.getElementById('site-url').value = ''; 
-            toggleModal(true); 
-        }
-        
+        function openLinkModal(target) { currentModalTarget = target; const textEl = document.getElementById('modal-title-text'); if(target === 'friend') textEl.innerText = t('modalAddFriend'); else if(target === 'custom') textEl.innerText = t('modalAddCloud'); else textEl.innerText = t('modalAddSection'); toggleModal(true); }
+        function toggleModal(show) { const modal = document.getElementById('modal'); if (show) { document.getElementById('site-name').value = ''; document.getElementById('site-url').value = ''; modal.classList.remove('hidden'); } else { modal.classList.add('hidden'); } }
         function closeModalOnBlank(e) { if(e.target.id === 'modal') toggleModal(false); }
 
         async function saveActiveLink() {
@@ -754,39 +649,7 @@
             if(!name || !url) return alert(currentLang === 'zh' ? '请完整填写名称和网址！' : 'Please fill in both name and URL!');
             if(!/^https?:\/\//i.test(url)) url = 'https://' + url;
 
-            if (currentModalTarget.startsWith('edit_section_')) {
-                const parts = currentModalTarget.split('_'); 
-                const secId = parts[2];
-                const linkIdx = parseInt(parts[3], 10);
-                let secs = cloudConfig.dynamicSections || [];
-                const sec = secs.find(s => s.id === secId);
-                if(sec && sec.links[linkIdx]) { 
-                    sec.links[linkIdx] = { name, url }; 
-                    saveDynamicSections(secs); 
-                }
-            } else if (currentModalTarget.startsWith('edit_custom_')) {
-                const index = parseInt(currentModalTarget.replace('edit_custom_', ''), 10);
-                try { 
-                    const res = await fetch('/api/links'); 
-                    let links = res.ok ? await res.json() : JSON.parse(localStorage.getItem('nav_custom_links') || '[]'); 
-                    links[index] = { name, url };
-                    await fetch('/api/links', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(links) }); 
-                    localStorage.setItem('nav_custom_links', JSON.stringify(links)); loadCustomLinks(); 
-                } catch (error) { 
-                    const links = JSON.parse(localStorage.getItem('nav_custom_links') || '[]'); 
-                    links[index] = { name, url };
-                    localStorage.setItem('nav_custom_links', JSON.stringify(links)); loadCustomLinks(); 
-                }
-            } else if (currentModalTarget.startsWith('edit_friend_')) {
-                const index = parseInt(currentModalTarget.replace('edit_friend_', ''), 10);
-                let linksStr = localStorage.getItem('nav_friend_links'); 
-                let links = linksStr ? JSON.parse(linksStr) : []; 
-                if(links.length === 0) { links = [ { name: "IT头条博客", url: "https://it-toutiao.blogspot.com" }, { name: "科技共享导航", url: "https://kjgx.168668520.xyz" } ]; }
-                if (links[index]) {
-                    links[index] = { name, url };
-                    localStorage.setItem('nav_friend_links', JSON.stringify(links)); loadFriendLinks();
-                }
-            } else if (currentModalTarget.startsWith('section_')) {
+            if (currentModalTarget.startsWith('section_')) {
                 const secId = currentModalTarget.replace('section_', ''); let secs = cloudConfig.dynamicSections || []; const sec = secs.find(s => s.id === secId);
                 if(sec) { sec.links.push({ name, url }); saveDynamicSections(secs); }
             } else if(currentModalTarget === 'friend') {
@@ -794,23 +657,7 @@
             } else {
                 try { const res = await fetch('/api/links'); let links = res.ok ? await res.json() : JSON.parse(localStorage.getItem('nav_custom_links') || '[]'); links.push({ name, url }); await fetch('/api/links', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(links) }); localStorage.setItem('nav_custom_links', JSON.stringify(links)); loadCustomLinks(); } 
                 catch (error) { const links = JSON.parse(localStorage.getItem('nav_custom_links') || '[]'); links.push({ name, url }); localStorage.setItem('nav_custom_links', JSON.stringify(links)); loadCustomLinks(); }
-            } 
-            toggleModal(false);
-        }
-
-        async function openEditCustomLinkModal(e, index) {
-            e.preventDefault(); e.stopPropagation();
-            let links = []; 
-            try { const res = await fetch('/api/links'); if(res.ok) links = await res.json(); else throw new Error(); } 
-            catch(err) { links = JSON.parse(localStorage.getItem('nav_custom_links') || '[]'); }
-            
-            if(links[index]) {
-                currentModalTarget = `edit_custom_${index}`;
-                document.getElementById('modal-title-text').innerText = t('modalEditSectionLink');
-                document.getElementById('site-name').value = links[index].name;
-                document.getElementById('site-url').value = links[index].url;
-                toggleModal(true);
-            }
+            } toggleModal(false);
         }
 
         async function loadCustomLinks() {
@@ -835,10 +682,7 @@
 
             const pClass = isCompact ? 'p-2' : 'p-3'; const spaceXClass = isCompact ? 'space-x-1.5' : 'space-x-2.5';
             const iconSizeClass = isCompact ? 'w-4 h-4 text-[9px]' : 'w-5 h-5 text-[10px]'; const imgSizeClass = isCompact ? 'w-4 h-4' : 'w-5 h-5';
-            const textSizeClass = isCompact ? 'text-[11px]' : 'text-sm'; const prClass = isCompact ? 'pr-4' : 'pr-5'; 
-            
-            const actionWrapClass = isCompact ? 'right-1 flex gap-0.5' : 'right-2 flex gap-1';
-            const btnActionClass = isCompact ? 'text-[10px] px-1 py-0.5' : 'text-xs p-1';
+            const textSizeClass = isCompact ? 'text-[11px]' : 'text-sm'; const prClass = isCompact ? 'pr-4' : 'pr-5'; const btnClass = isCompact ? 'right-1 text-[10px] px-1 py-0.5' : 'right-2 text-xs p-1';
 
             visibleLinks.forEach((item, index) => {
                 const displayName = getLocalizedLinkName(item.name, item.url);
@@ -852,10 +696,7 @@
                                 ${displayIcon} <span class="${textSizeClass} font-medium truncate">${displayName}</span>
                             </a>
                         </div>
-                        <div class="admin-only absolute ${actionWrapClass} opacity-0 group-hover:opacity-100 transition-opacity z-10">
-                            <button type="button" onclick="openEditCustomLinkModal(event, ${index})" class="${btnActionClass} text-slate-400 hover:text-sky-400 bg-slate-500/20 rounded cursor-pointer shrink-0" title="编辑"><i class="fas fa-pen"></i></button>
-                            <button type="button" onclick="deleteCustomLink(event, ${index})" class="${btnActionClass} text-slate-400 hover:text-red-400 bg-slate-500/20 rounded cursor-pointer shrink-0" title="删除"><i class="fas fa-trash-alt"></i></button>
-                        </div>
+                        <button type="button" onclick="deleteCustomLink(event, ${index})" class="admin-only absolute ${btnClass} text-slate-400 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-500/20 rounded cursor-pointer shrink-0"><i class="fas fa-trash-alt"></i></button>
                     </div>`;
             });
 
@@ -868,21 +709,6 @@
         function toggleExpandCustomLinks() { isCustomLinksExpanded = !isCustomLinksExpanded; loadCustomLinks(); }
         async function deleteCustomLink(e, index) { e.preventDefault(); e.stopPropagation(); if(!confirm(t('delConfirm'))) return; try { const res = await fetch('/api/links'); let links = res.ok ? await res.json() : JSON.parse(localStorage.getItem('nav_custom_links') || '[]'); links.splice(index, 1); await fetch('/api/links', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(links) }); localStorage.setItem('nav_custom_links', JSON.stringify(links)); if(links.length <= 9) isCustomLinksExpanded = false; loadCustomLinks(); } catch(error) { const links = JSON.parse(localStorage.getItem('nav_custom_links') || '[]'); links.splice(index, 1); localStorage.setItem('nav_custom_links', JSON.stringify(links)); if(links.length <= 9) isCustomLinksExpanded = false; loadCustomLinks(); } }
 
-        function openEditFriendLinkModal(e, index) {
-            e.preventDefault(); e.stopPropagation();
-            let linksStr = localStorage.getItem('nav_friend_links'); 
-            let links = linksStr ? JSON.parse(linksStr) : []; 
-            if(links.length === 0) { links = [ { name: "IT头条博客", url: "https://it-toutiao.blogspot.com" }, { name: "科技共享导航", url: "https://kjgx.168668520.xyz" } ]; }
-            
-            if(links[index]) {
-                currentModalTarget = `edit_friend_${index}`;
-                document.getElementById('modal-title-text').innerText = t('modalEditSectionLink');
-                document.getElementById('site-name').value = links[index].name;
-                document.getElementById('site-url').value = links[index].url;
-                toggleModal(true);
-            }
-        }
-
         function loadFriendLinks() {
             const container = document.getElementById('friend-links-container'); let linksStr = localStorage.getItem('nav_friend_links'); let links = linksStr ? JSON.parse(linksStr) : []; container.innerHTML = '';
             if(links.length === 0) { links = [ { name: "IT头条博客", url: "https://it-toutiao.blogspot.com" }, { name: "科技共享导航", url: "https://kjgx.168668520.xyz" } ]; }
@@ -891,10 +717,7 @@
                 container.innerHTML += `
                     <div class="group relative flex items-center justify-between p-2.5 bg-slate-500/5 border border-slate-500/10 rounded-xl hover:bg-emerald-600/10 transition-all text-center">
                         <a href="${item.url}" draggable="false" target="_blank" rel="noopener noreferrer" class="w-full text-xs font-medium text-slate-400 hover:text-emerald-400 transition-colors truncate px-2">${displayName}</a>
-                        <div class="admin-only absolute right-1 flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity z-10">
-                            <button type="button" onclick="openEditFriendLinkModal(event, ${index})" class="text-[10px] text-slate-500 hover:text-sky-400 bg-slate-500/10 px-1 rounded cursor-pointer" title="编辑"><i class="fas fa-pen"></i></button>
-                            <button type="button" onclick="deleteFriendLink(event, ${index})" class="text-[10px] text-slate-500 hover:text-red-400 bg-slate-500/10 px-1 rounded cursor-pointer" title="删除"><i class="fas fa-times"></i></button>
-                        </div>
+                        <button type="button" onclick="deleteFriendLink(event, ${index})" class="admin-only absolute right-1 text-[10px] text-slate-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-500/10 px-1 rounded cursor-pointer"><i class="fas fa-times"></i></button>
                     </div>`;
             });
         }
